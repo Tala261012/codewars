@@ -327,7 +327,6 @@ let cube = function (n) {
 console.log("Завдання 16 ====================================");
 console.log("cube(3)", cube(3)); // Виведе: 27
 
-//?? Работает, результат правильный, но я не поняла на счет function compose(func1, func2)
 // Задача 17: створити дві функції, одна з яких збільшує число на 1, а інша - множить число на 2, а потім створити композицію цих функцій.
 function increment(n) {
   // Повертаємо n + 1
@@ -339,22 +338,23 @@ function double(n) {
   return n * 2;
 }
 
-//????????????????????????????????????? Как правильно?
-// function compose(func1, func2) {
-// Повертаємо нову функцію, яка приймає аргемент n
-// Повертаємо func2, в яку передаємо func1 з аргументом n
-//   let i = func1;
-//   return func2(i);
-// }
+function compose(func1, func2) {
+  // Повертаємо нову функцію, яка приймає аргемент n
+  // Повертаємо func2, в яку передаємо func1 з аргументом n
 
-//????????????????????????????????????? Как правильно?
+  return function (n) {
+    return func2(func1(n));
+  };
+}
+
 // Створюємо змінну createCompose якій присвоємо результат виконання функції compose з аргументами increment та double
-// let createCompose = compose(increment(n), double(n))
+let createCompose = compose(increment, double);
 
-//?? Сделала по-другому, вот так:
-let createCompose = (n) => {
-  return double(increment(n));
-};
+//Старое решение---------------------------------
+// let createCompose = (n) => {
+//   return double(increment(n));
+// };
+//Старое решение---------------------------------
 
 console.log("Завдання 17 ====================================");
 // Розкоментуйте після виконаня завдання
