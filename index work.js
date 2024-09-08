@@ -5,7 +5,6 @@ function getArrayFromString(str) {
 }
 
 function getStringFromArray(arr) {
-  console.log("getStringFromArray START", arr);
   return arr.join("");
 }
 
@@ -17,11 +16,12 @@ function checkZerosBefore(arr) {
   return arr;
 }
 
-function compareStrings(upperArr, lowerArr) {
-  console.log("compareStrings START");
+function compareStrings(upper, lower) {
+  const upperArr = checkZerosBefore(getArrayFromString(upper));
+  upper = getStringFromArray(upperArr);
 
-  const upper = getStringFromArray(upperArr);
-  const lower = getStringFromArray(lowerArr);
+  const lowerArr = checkZerosBefore(getArrayFromString(lower));
+  lower = getStringFromArray(lowerArr);
 
   if (upper.length < lower.length) return false;
   else if (upper.length > lower.length) return true;
@@ -29,14 +29,12 @@ function compareStrings(upperArr, lowerArr) {
   return false;
 }
 
-function getFirstArr(delimoe, delitel) {
-  console.log("getFirstArr START");
-
+function getFirstString(delimoe, delitel) {
   const result = delimoe.slice(0, delitel.length);
-  const restOfArr = delimoe.slice(delitel.length);
+  const restOfString = delimoe.slice(delitel.length);
 
   if (compareStrings(result, delitel)) {
-    return { result, ostatok: restOfArr };
+    return { result, ostatok: restOfString };
   } else {
     return {
       result: delimoe.slice(0, delitel.length + 1),
@@ -45,23 +43,21 @@ function getFirstArr(delimoe, delitel) {
   }
 }
 
-function getMainArr(tempArr, restOfArr) {
-  const result = tempArr.concat(restOfArr.slice(0, 1));
-  const ostatok = restOfArr.slice(1);
+function getMainStr(tempString, restOfString) {
+  const result = tempString + restOfString.slice(0, 1);
+  const ostatok = restOfString.slice(1);
 
   if (ostatok.length !== 0) return { result, ostatok };
-  else return { result, ostatok: [] };
+  else return { result, ostatok: "" };
 }
 
-function multiplyArr(strArr, multiplier) {
-  console.log("multiplyArr START");
-
-  if (multiplier === 0) return [0];
+function multiplyStr(str, multiplier) {
+  if (multiplier === 0) return "0";
 
   let memory = 0;
   const result = [];
 
-  const arr = strArr.reverse();
+  const arr = checkZerosBefore(getArrayFromString(str)).reverse();
 
   for (let i = 0; i < arr.length; i++) {
     const res = arr[i] * multiplier + memory;
@@ -71,50 +67,53 @@ function multiplyArr(strArr, multiplier) {
 
   if (memory > 0) result.push(memory);
 
-  return result.reverse(); //возвращает массив
+  return result.reverse().join(""); //возвращает строку
 }
 
 function findNumber(main, delitel) {
   if (!compareStrings(main, delitel)) {
-    return { result: [0], num: 0 };
+    return { result: "0", num: 0 };
   }
 
-  let last = [],
-    resultArr = [];
+  let last = "",
+    resultStr = "";
 
   for (let i = 1; i <= 9; i++) {
-    last = resultArr;
-    resultArr = multiplyArr(delitel, i);
+    last = resultStr;
+    resultStr = multiplyStr(delitel, i);
 
-    if (compareStrings(main, resultArr) && i < 9) {
+    if (compareStrings(main, resultStr) && i < 9) {
       continue;
-    } else if (compareStrings(main, resultArr) && i === 9) {
-      return { result: resultArr, num: i };
+    } else if (compareStrings(main, resultStr) && i === 9) {
+      return { result: resultStr, num: i };
     } else {
       return { result: last, num: i - 1 };
     }
   }
 }
 
-function subtractArrs(upper, lower) {
+function subtractStrings(upper, lower) {
   if (!compareStrings(upper, lower)) {
     return upper;
   }
 
-  const dif = upper.length - lower.length;
+  const upperArr = checkZerosBefore(getArrayFromString(upper));
+  const lowerArr = checkZerosBefore(getArrayFromString(lower));
+
+  const dif = upperArr.length - lowerArr.length;
   if (dif) {
     for (let i = 0; i < dif; i++) {
-      lower.unshift(0);
+      lowerArr.unshift(0);
     }
   }
 
   let memory = 0;
   const result = [];
 
-  for (let i = upper.length - 1; i >= 0; i--) {
-    upper[i] = upper[i] - memory;
+  for (let i = upperArr.length - 1; i >= 0; i--) {
+    upperArr[i] = upperArr[i] - memory;
 
-    const num = upper[i] - lower[i];
+    const num = upperArr[i] - lowerArr[i];
     if (num >= 0) {
       result.unshift(num);
       memory = 0;
@@ -124,30 +123,27 @@ function subtractArrs(upper, lower) {
     }
   }
 
-  return checkZerosBefore(result);
+  return checkZerosBefore(result).join("");
 }
 
 function devideStrings(delimoe, delitel) {
-  const delimoeArr = checkZerosBefore(getArrayFromString(delimoe));
-  const delitelArr = checkZerosBefore(getArrayFromString(delitel));
-
-  if (!compareStrings(delimoeArr, delitelArr)) return [0]; // если делимое меньше делителя, то 0.
+  if (!compareStrings(delimoe, delitel)) return 0; // если делимое меньше делителя, то 0.
 
   const result = [];
-  let mainArr = getFirstArr(delimoeArr, delitelArr);
+  let mainStr = getFirstString(delimoe, delitel);
   let subtract;
 
-  for (let i = 0; i <= delimoeArr.length - delitelArr.length; i++) {
-    const obj = findNumber(mainArr.result, delitel);
+  for (let i = 0; i <= delimoe.length - delitel.length; i++) {
+    const obj = findNumber(mainStr.result, delitel);
 
     result.push(obj.num); //найденное число, результат
     //obj.result - результат умножения на найденное число
 
-    subtract = subtractArrs(mainArr.result, obj.result);
+    subtract = subtractStrings(mainStr.result, obj.result);
 
-    if (mainArr.ostatok) {
-      const newArr = getMainArr(subtract, mainArr.ostatok);
-      mainArr = newArr;
+    if (mainStr.ostatok) {
+      const newStr = getMainStr(subtract, mainStr.ostatok);
+      mainStr = newStr;
     } else break;
   }
 
