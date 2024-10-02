@@ -1,46 +1,52 @@
-//? Продавец манго
+//? Кратчайшее расстояние до izum в числах и путь к ней
 const graph = {
-  you: ["alice", "bob", "claire"],
-  bob: ["anij", "peggy"],
-  alice: ["peggy"],
-  claire: ["thom", "jonny"],
-  anuj: [],
-  peggy: [],
-  thom: [],
-  jonny: [],
+  kharkov: ["chuguev", "merefa"],
+  chuguev: ["balakleya"],
+  merefa: ["zmiyov", "pervomayskiy", "krasnopavlovka"],
+  zmiyov: ["balakleya"],
+  pervomayskiy: ["balakleya"],
+  balakleya: ["izum"],
+  krasnopavlovka: ["mechebilovo"],
+  mechebilovo: ["kamishevaha", "xyz"],
+  kamishevaha: ["izum"],
+  izum: [],
+  xyz: [],
 };
 
-//Проверка на продавца манго
-function checkMango(name) {
-  return name.at(name.length - 1) === "m" ? true : false;
-}
+function bfs(graph, start, target) {
+  const visited = {}; // Объект для хранения посещенных вершин
+  const distances = {}; // Объект для хранения расстояний до каждой вершины
+  const queue = [start]; // Очередь для обхода
 
-// Функция поиска в ширину
-function bfs(graph, start) {
-  const visited = {}; // объект для отслеживания посещенных вершин
-  const queue = [start]; // очередь для обхода вершин
-  const result = []; // массив для хранения результатов обхода
-
-  visited[start] = true; // помечаем стартовую вершину как посещенную
+  visited[start] = true; // Помечаем стартовую вершину как посещенную
+  distances[start] = 0; //* Расстояние до стартовой вершины = 0
 
   while (queue.length) {
-    const current = queue.shift(); // извлекаем вершину из очереди
-    result.push(current); // добавляем её в результат
+    const current = queue.shift(); // Извлекаем вершину из очереди
 
-    if (checkMango(current)) console.log(`This is ${current}!`);
+    // Если мы достигли целевой вершины, возвращаем расстояние до нее
+    if (current === target) {
+      return distances[current];
+    }
 
-    // Перебираем смежные вершины
-    for (const ind in graph[current]) {
-      if (!visited[graph[current][ind]]) {
-        // если вершина не была посещена
-        visited[graph[current][ind]] = true; // помечаем её как посещенную
-        queue.push(graph[current][ind]); // добавляем в очередь для дальнейшего обхода
+    // Перебираем всех соседей текущей вершины
+    for (const neighbor of graph[current]) {
+      if (!visited[neighbor]) {
+        // Если сосед ещё не был посещен
+        visited[neighbor] = true; // Помечаем его как посещенного
+        distances[neighbor] = distances[current] + 1; // Увеличиваем расстояние на 1
+        queue.push(neighbor); // Добавляем его в очередь для дальнейшего обхода
       }
     }
   }
 
-  return result; // возвращаем результат обхода
+  // Если целевая вершина недостижима, возвращаем -1
+  return -1;
 }
 
-// Пример использования
-console.log(bfs(graph, "you"));
+// Запуск поиска минимального количества шагов до 'izum'
+const startNode = "kharkov";
+const targetNode = "izum";
+const steps = bfs(graph, startNode, targetNode);
+
+console.log(`Минимальное количество шагов до '${targetNode}':`, steps);
