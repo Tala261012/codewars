@@ -1,60 +1,64 @@
 //? Алгоритм Дейкстры Dijkstra's algorithm
-// работает только с направленными ациклическими графами DAG (Directed Acyclic Graph)
-// НЕ работает, если есть ребра с отрицательным весом
+// Вывести кратчайший путь  из точки А в точку Б со значениями расстояний до каждой точки
 const graph = {
-  start: { a: 6, b: 2 },
-  a: { end: 1 },
-  b: { a: 3, end: 5 },
-  end: { a: 1, b: 5 },
+  a: { b: 2, c: 1, i: 3 },
+  b: { a: 2, d: 3 },
+  c: { a: 1, d: 1 },
+  d: { b: 3, c: 1, e: 5 },
+  e: { d: 5, i: 2 },
+  i: { a: 3, e: 2 },
 };
 
-function dijkstra(graph, start, end) {
-  const costs = {}; //стоимость всех узлов от начального
-  const parents = {}; //таблица родителей
-  const processed = new Set(); //обработан узел или нет
+function allShortPathWithDistances(graph, start, end) {
+  const distances = {};
+  const visited = new Set();
+  const path = {};
 
-  //подготовка =================================
-  for (const temp in graph) {
-    if (temp != start) {
-      costs[temp] = Infinity;
+  // заполняем объект с расстояниями
+  for (const key in graph) {
+    if (key !== start) {
+      distances[key] = Infinity;
     } else {
-      costs[temp] = 0;
+      distances[start] = 0;
     }
   }
 
-  while (!processed.has(end)) {
+  while (!visited.has(end)) {
     let lowestDistance = Infinity;
     let node = null;
 
-    for (const temp in costs) {
-      if (lowestDistance > costs[temp] && !processed.has(temp)) {
-        lowestDistance = costs[temp];
-        node = temp;
+    for (const key in distances) {
+      if (lowestDistance > distances[key] && !visited.has(key)) {
+        lowestDistance = distances[key];
+        node = key;
       }
     }
 
-    const neighbours = graph[node]; // объект с соседями наименьшей вершины
-    for (const temp in neighbours) {
-      const newDistance = neighbours[temp] + costs[node];
-      if (newDistance < costs[temp]) {
-        costs[temp] = newDistance;
-        parents[temp] = node;
+    const neighbors = graph[node];
+    for (const key in neighbors) {
+      const newDistance = distances[node] + neighbors[key];
+      if (newDistance < distances[key]) {
+        distances[key] = newDistance;
+        // сохраняем название родительской вершины
+        path[key] = node;
       }
     }
 
-    processed.add(node);
-  } //while
+    visited.add(node);
+  } // while
 
-  const short = [];
-  let current = end;
+  //формируем кратчайший путь с названиями
+  const shortPath = [];
+  let current = end; // название конечной точки
   while (current !== start) {
-    short.unshift(current);
-    current = parents[current];
+    const currentWithDistance = { [current]: distances[current] }; //!
+    shortPath.unshift(currentWithDistance);
+    current = path[current];
   }
-  short.unshift(start);
-  console.log(costs);
-  return short;
-  //============================================
+  shortPath.unshift({ [start]: 0 });
+
+  console.log(shortPath);
+  return distances;
 }
 
-console.log(dijkstra(graph, "start", "end"));
+console.log(allShortPathWithDistances(graph, "a", "e"));

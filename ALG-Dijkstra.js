@@ -121,8 +121,105 @@ function dijkstra2(graph, start, end) {
   short.unshift(start);
   console.log(costs);
   return short;
-  //============================================
 }
 
 console.log(dijkstra2(graph2, "start", "end"));
+//===========================================================================
+
+// Вывести все кратчайшие расстояния из точки А во все точки
+function allShortDistances(graph, start) {
+  const distances = {};
+  const visited = new Set();
+
+  // заполняем объект с расстояниями
+  for (const key in graph) {
+    if (key !== start) {
+      distances[key] = Infinity;
+    } else {
+      distances[start] = 0;
+    }
+  }
+
+  while (visited.size !== Object.keys(graph).length) {
+    let lowestDistance = Infinity;
+    let node = null;
+
+    for (const key in distances) {
+      if (lowestDistance > distances[key] && !visited.has(key)) {
+        lowestDistance = distances[key];
+        node = key;
+      }
+    }
+
+    const neighbors = graph[node];
+    for (const key in neighbors) {
+      const newDistance = distances[node] + neighbors[key];
+      if (newDistance < distances[key]) {
+        distances[key] = newDistance;
+      }
+    }
+
+    visited.add(node);
+  } // while
+
+  return distances;
+}
+
+console.log(allShortDistances(graph, "a"));
+//===========================================================================
+
+// Вывести кратчайший путь  из точки А в точку Б со значениями расстояний до каждой точки
+function allShortPathWithDistances(graph, start, end) {
+  const distances = {};
+  const visited = new Set();
+  const path = {};
+
+  // заполняем объект с расстояниями
+  for (const key in graph) {
+    if (key !== start) {
+      distances[key] = Infinity;
+    } else {
+      distances[start] = 0;
+    }
+  }
+
+  while (!visited.has(end)) {
+    let lowestDistance = Infinity;
+    let node = null;
+
+    for (const key in distances) {
+      if (lowestDistance > distances[key] && !visited.has(key)) {
+        lowestDistance = distances[key];
+        node = key;
+      }
+    }
+
+    const neighbors = graph[node];
+    for (const key in neighbors) {
+      const newDistance = distances[node] + neighbors[key];
+      if (newDistance < distances[key]) {
+        distances[key] = newDistance;
+        // сохраняем название родительской вершины
+        path[key] = node;
+      }
+    }
+
+    visited.add(node);
+  } // while
+
+  //формируем кратчайший путь с названиями
+  const shortPath = [];
+  let current = end; // название конечной точки
+  while (current !== start) {
+    const currentWithDistance = { [current]: distances[current] }; //TODO
+    shortPath.unshift(currentWithDistance);
+    current = path[current];
+  }
+  shortPath.unshift({ [start]: 0 });
+
+  console.log(shortPath);
+  return distances;
+}
+
+console.log(allShortPathWithDistances(graph, "a", "e"));
 //===========================================================================
