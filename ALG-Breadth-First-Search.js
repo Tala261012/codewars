@@ -195,11 +195,11 @@ function bfs5(graph, start, target) {
   const visited = {}; // Объект для хранения посещенных вершин
   const distances = {}; // Объект для хранения расстояний до каждой вершины
   const queue = [start]; // Очередь для обхода
-  const predcity = {};
+  const predcity = {}; //TODO объект с предыдущими вершинами для построения пути
 
   visited[start] = true; // Помечаем стартовую вершину как посещенную
   distances[start] = 0;
-  predcity[start] = null; //TODO объект с предыдущими вершинами для построения пути
+  predcity[start] = null;
 
   while (queue.length) {
     const current = queue.shift(); // Извлекаем вершину из очереди
