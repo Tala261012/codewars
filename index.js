@@ -1,15 +1,15 @@
 //? Алгоритм Дейкстры Dijkstra's algorithm
-// Вывести кратчайший путь  из точки А в точку Б со значениями расстояний до каждой точки
+// Пример из книги, истрия одного обмена (book --> piano), стр 160
 const graph = {
-  a: { b: 2, c: 1, i: 3 },
-  b: { a: 2, d: 3 },
-  c: { a: 1, d: 1 },
-  d: { b: 3, c: 1, e: 5 },
-  e: { d: 5, i: 2 },
-  i: { a: 3, e: 2 },
+  book: { disc: 5, poster: 0 },
+  disc: { guitar: 15, drum: 20 },
+  guitar: { piano: 20 },
+  drum: { piano: 10 },
+  poster: { guitar: 30, drum: 35 },
+  piano: null,
 };
 
-function allShortPathWithDistances(graph, start, end) {
+function exchange(graph, start, end) {
   const distances = {};
   const visited = new Set();
   const path = {};
@@ -51,14 +51,12 @@ function allShortPathWithDistances(graph, start, end) {
   const shortPath = [];
   let current = end; // название конечной точки
   while (current !== start) {
-    const currentWithDistance = { [current]: distances[current] }; //!
-    shortPath.unshift(currentWithDistance);
+    shortPath.unshift(current);
     current = path[current];
   }
-  shortPath.unshift({ [start]: 0 });
+  shortPath.unshift(start);
 
-  console.log(shortPath);
-  return distances;
+  return { shortest: distances[end], shortPath };
 }
 
-console.log(allShortPathWithDistances(graph, "a", "e"));
+console.log(exchange(graph, "book", "piano"));
