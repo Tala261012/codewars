@@ -40,3 +40,21 @@ function binarySearch(arr, item) {
 fillArray(arr, 50, 500);
 console.log(binarySearch(arr, 50));
 // =============================================================================
+
+// рекурсивная реализация ======================================================
+function binarySearchRecursive(arr, target, left = 0, right = arr.length - 1) {
+  if (left > right) {
+    return -1; // Элемент не найден
+  }
+
+  const mid = Math.floor((left + right) / 2);
+
+  if (arr[mid] === target) {
+    return mid; // Элемент найден, возвращаем индекс
+  } else if (arr[mid] < target) {
+    return binarySearchRecursive(arr, target, mid + 1, right); // Ищем в правой половине
+  } else {
+    return binarySearchRecursive(arr, target, left, mid - 1); // Ищем в левой половине
+  }
+}
+// =============================================================================
