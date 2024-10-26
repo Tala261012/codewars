@@ -42,7 +42,7 @@ function summArr(arr) {
   if (arr.length === 1) return arr[0]; // базовый случай
   else {
     const temp = arr.splice(0, 1);
-    const sum = temp[0] + summArr(arr);
+    const sum = temp[0] + summArr(arr); // первый элемент + рекурсия
     return sum;
   }
 }
@@ -55,7 +55,7 @@ console.log(summArr(myArr));
 // когда в рекурсивной функции задействован массив, то базовый случай - это
 // пустой массив или массив из одного элемента
 
-//выбираем опорный элемент и находим элементы больше и меньше него
+//выбираем опорный элемент и находим элементы больше и меньше него, создаем подмассивы
 
 const arrForSorting = [17, 23, 0, 16, 98, 55, 4, 77, -1];
 
@@ -68,6 +68,7 @@ function quickSort(arr) {
     const greater = arr.filter((el) => el > base); // большие
 
     return quickSort(less).concat(arr[0], quickSort(greater)); // быстрая сортировка
+    // рекурсия + опорный элемент + рекурсия
   }
 }
 
