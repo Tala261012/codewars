@@ -48,6 +48,7 @@ let symNameAgain = Symbol.keyFor(symAgain);
 console.log(symName); // sym
 console.log(symNameAgain); // sym
 
+// СИСТЕМНЫЕ СИМВОЛЫ
 // Существует множество «системных» символов, использующихся внутри самого JavaScript,
 // и мы можем использовать их, чтобы настраивать различные аспекты поведения объектов.
 // Эти символы перечислены в спецификации в таблице Well-known symbols:
@@ -58,3 +59,13 @@ console.log(symNameAgain); // sym
 // Symbol.iterator
 // Symbol.toPrimitive
 // и т д
+
+//* P.S.
+// Существует встроенный метод
+//? Object.getOwnPropertySymbols(obj)
+// – с его помощью можно получить все свойства объекта с ключами-символами.
+//Также существует метод
+//? Reflect.ownKeys(obj),
+// который возвращает все ключи объекта, включая символьные. Так что они не совсем спрятаны.
+
+console.log(Reflect.ownKeys(user)); // [ 'name', 'age', Symbol(id) ]

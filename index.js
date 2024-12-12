@@ -58,3 +58,5 @@ console.log(symNameAgain); // sym
 // Symbol.iterator
 // Symbol.toPrimitive
 // и т д
+
+console.log(Reflect.ownKeys(user));
