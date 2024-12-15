@@ -8,7 +8,17 @@
 </head>
 <body>
 	<script>
-		
+		let mn = +prompt('enter minimum', 0);
+		let mx = +prompt('enter maximum', 1);
+
+		function random(min, max) {
+			let rand = min + Math.random() * (max + 1 - min);
+  		return Math.floor(rand);
+		}
+
+		alert(random(mn, mx));
+		alert(random(mn, mx));
+		alert(random(mn, mx));
 	</script>
 </body>
 </html>
