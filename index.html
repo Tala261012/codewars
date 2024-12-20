@@ -8,17 +8,22 @@
 </head>
 <body>
 	<script>
-		let mn = +prompt('enter minimum', 0);
-		let mx = +prompt('enter maximum', 1);
-
-		function random(min, max) {
-			let rand = min + Math.random() * (max + 1 - min);
-  		return Math.floor(rand);
+		let arr = [];
+		let num = 0;
+		
+		while (true) {
+			num = prompt('Enter a number:', 0);
+			if( num === null || num === '' || isNaN(null) ) break;
+			arr.push(+num);
 		}
 
-		alert(random(mn, mx));
-		alert(random(mn, mx));
-		alert(random(mn, mx));
-	</script>
+		let sum = 0
+		for (let i = 0; i<arr.length; i++) {
+			sum += arr[i];
+		}
+		
+		alert(sum);
+
+</script>
 </body>
 </html>
