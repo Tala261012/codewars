@@ -175,3 +175,6 @@ console.log(arraysEqual([1, 2], [1, 2])); // true
 // возврацает новый массив
 //? arr.flatMap((elem, index, array) => {}, thisArg)
 // объединение flat и map
+
+//? P.s.
+// push, pop, shift, unshift, sort, reverse и splice изменяют исходный массив.
