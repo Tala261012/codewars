@@ -159,3 +159,89 @@ console.log(shuffle(arr24));
 console.log(shuffle2(arr24));
 console.log(shuffle3(arr24));
 // =====================================================
+
+/* Напишите функцию getAverageAge(users), 
+которая принимает массив объектов со свойством age 
+и возвращает средний возраст. */
+
+function getAverageAge(users) {
+  return users.reduce((acc, item) => acc + item.age, 0) / users.length;
+}
+
+let vasya2 = { name: "Вася", age: 25 };
+let petya2 = { name: "Петя", age: 30 };
+let masha2 = { name: "Маша", age: 29 };
+
+let arr25 = [vasya2, petya2, masha2];
+
+console.log(getAverageAge(arr25));
+// =====================================================
+
+/* Пусть arr – массив строк.
+Напишите функцию unique(arr), которая возвращает массив, 
+содержащий только уникальные элементы arr. */
+
+function unique(arr) {
+  const result = [];
+
+  for (let elem of arr) {
+    if (!result.includes(elem)) {
+      result.push(elem);
+    }
+  }
+
+  return result;
+}
+
+let strings = [
+  "кришна",
+  "кришна",
+  "харе",
+  "харе",
+  "харе",
+  "харе",
+  "кришна",
+  "кришна",
+  ":-O",
+];
+
+console.log(unique(strings));
+// P.s. с помощью Map и Set это моно оптимизировать.
+// =====================================================
+
+/* Допустим, мы получили массив пользователей в виде 
+{id:..., name:..., age:... }.
+Создайте функцию groupById(arr), которая создаст из него объект 
+с id в качестве ключа и элементами массива в качестве значений. */
+
+let users2 = [
+  { id: "john", name: "John Smith", age: 20 },
+  { id: "ann", name: "Ann Smith", age: 24 },
+  { id: "pete", name: "Pete Peterson", age: 31 },
+];
+
+function groupById(arr) {
+  const obj = {};
+
+  for (let elemObj of arr) {
+    obj[elemObj.id] = elemObj;
+  }
+
+  return obj;
+}
+
+// решение из учебника
+function groupById2(array) {
+  return array.reduce((obj, value) => {
+    obj[value.id] = value;
+    return obj;
+  }, {});
+}
+
+let usersById = groupById(users2);
+console.log(usersById);
+
+let usersById2 = groupById2(users2);
+console.log(usersById2);
+
+// =====================================================
