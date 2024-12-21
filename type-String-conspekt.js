@@ -22,10 +22,10 @@ let str = `Hello`;
 //? toLowerCase() и toUpperCase()
 // меняют регистр символов
 
-//? str.indexOf(substr, pos?)
+//? .indexOf(substr, pos?)
 // ищет подстроку substr в строке str, начиная с позиции pos,
 // и возвращает позицию, на которой располагается совпадение, либо -1
-//? str.lastIndexOf(substr, position?)
+//? .lastIndexOf(substr, position?)
 // похожий метод, ищет с конца строки к её началу
 // position - это будет типа-коеец строки
 let str2 = "Ослик Иа-Иа посмотрел на виадук";
@@ -38,20 +38,20 @@ while ((pos = str2.indexOf(target, pos + 1)) != -1) {
 
 console.log("last index ", str2.lastIndexOf(target, 7)); // т е искать раньше 7
 
-//? str.includes(substr, pos?)
+//? .includes(substr, pos?)
 // возвращает true, если в строке str есть подстрока substr, true/false
 
-//? str.startsWith(substr, start?), str.endsWith(substr, end?)
+//? .startsWith(substr, start?), str.endsWith(substr, end?)
 // проверяют, соответственно, начинается ли и заканчивается ли строка определённой подстрокой
 // start с какого символа начинать
 // end на какогм символе заканчивать поиск
 
-//? str.slice(start, end?) (лучше использовать его)
+//? .slice(start, end?) (лучше использовать его)
 //Возвращает часть строки от start (включая) до end (не включая). Или до коныа строки
 // Можно использовать отрицательные значение - т е считать с конца строки, начиная с -1
-//? str.substring(start, end?)
+//? .substring(start, end?)
 // не поддерживает отрицательные аргументы, можно поменять start и end местами
-//? str.substr(start, length?)
+//? .substr(start, length?)
 // Возвращает часть строки от start длины length.
 // start может быть отрицательным
 
