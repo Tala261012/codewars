@@ -183,9 +183,9 @@ console.log(arraysEqual([1, 2], [1, 2])); // true
 // push, pop, shift, unshift, sort, reverse и splice изменяют исходный массив.
 
 //? Array.from(arrayLike, (elem, index) => {}?, thisArg?) =============================
-// Создает массив из итерабельной сущности.
-//TODO стрелочные функции плохо работают с this... (?)
-// поэтому в первом примере именно function
+// универсальный метод, принимает итерируемый объект или псевдомассив
+// и делает из него «настоящий» Array.
+// После этого мы уже можем использовать методы массивов.
 
 const obj7 = {
   0: "hello",
@@ -198,6 +198,8 @@ const obj7 = {
 const arr7 = Array.from(obj7);
 console.log(arr7); // [ 'hello', 'world', '!!!' ]
 
+//TODO стрелочные функции плохо работают с this... (?)
+// поэтому в этом примере именно function
 const arr8 = Array.from(
   obj7,
   function (elem, index) {
@@ -214,3 +216,37 @@ console.log(Array.from([1, 2, 3], (x) => x * 2)); // [ 2, 4, 6 ]
 const arrA = [1, 2, 3];
 const arrB = [4, 5, 6];
 console.log(Array.of(arrA, arrB)); // [ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
+
+//? Symbol.iterator ===================================================================
+let range = {
+  from: 1,
+  to: 5,
+};
+
+range[Symbol.iterator] = function () {
+  return {
+    current: this.from,
+    last: this.to,
+    next() {
+      if (this.current <= this.last) {
+        return { done: false, value: this.current++ };
+      } else {
+        return { done: true };
+      }
+    },
+  };
+};
+
+for (let num of range) {
+  console.log(num);
+}
+
+// явный вызов метода next()
+let iterator = range[Symbol.iterator]();
+while (true) {
+  let result = iterator.next();
+  if (result.done) break;
+  console.log(result.value); // выводит символы один за другим
+}
+
+console.log(Array.from(range)); // [ 1, 2, 3, 4, 5 ]
