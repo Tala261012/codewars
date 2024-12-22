@@ -65,6 +65,7 @@ console.log(arr100); // [ 1, 2 ]
 // возвращает true/false
 
 //? .find((item, index?, array?) => {}, thisArg?) ==================================
+//? .findLast
 // вызывается по очереди для каждого элемента массива. Ищет один (ПЕРВЫЙ) элемент,
 // который заставит функцию вернуть true.
 // Тогда поиск прерывается и возвращается item.
@@ -100,6 +101,8 @@ console.log(
 // без аргументов arr.sort() - элементы сортируются как строки
 // arr.sort((a, b) => b - a) - сортирует по убыванию
 // arr.sort((a, b) => а - b) - сортирует по возрастанию
+//? .toSorted((elemA?, elemB?) => {true/false}?, thisArg)
+// это копируюцая массив версия метода sort()
 //? .reverse()
 // меняет порядок элементов в arr на обратный.
 // возвращает массив arr с изменённым порядком элементов
@@ -174,7 +177,40 @@ console.log(arraysEqual([1, 2], [1, 2])); // true
 // by def depth === 1, т е из 3х-уровневого массива сделает 2х-уровневый
 // возврацает новый массив
 //? arr.flatMap((elem, index, array) => {}, thisArg)
-// объединение flat и map
+// объединение flat с глубиной 1  и map
 
 //? P.s.
 // push, pop, shift, unshift, sort, reverse и splice изменяют исходный массив.
+
+//? Array.from(arrayLike, (elem, index) => {}?, thisArg?) =============================
+// Создает массив из итерабельной сущности.
+//TODO стрелочные функции плохо работают с this... (?)
+// поэтому в первом примере именно function
+
+const obj7 = {
+  0: "hello",
+  1: "world",
+  2: "!!!",
+  length: 3,
+  prefix: "():",
+};
+
+const arr7 = Array.from(obj7);
+console.log(arr7); // [ 'hello', 'world', '!!!' ]
+
+const arr8 = Array.from(
+  obj7,
+  function (elem, index) {
+    return `${this.prefix} ${elem}`;
+  },
+  obj7
+);
+console.log(arr8); //  [ '(): hello', '(): world', '(): !!!' ]
+console.log(Array.from("john")); // [ 'j', 'o', 'h', 'n' ]
+console.log(Array.from([1, 2, 3], (x) => x * 2)); // [ 2, 4, 6 ]
+
+//? Array.of(elem1, ..., elemN)
+// Создает новый массив из любого кол-ва аргументов
+const arrA = [1, 2, 3];
+const arrB = [4, 5, 6];
+console.log(Array.of(arrA, arrB)); // [ [ 1, 2, 3 ], [ 4, 5, 6 ] ]
