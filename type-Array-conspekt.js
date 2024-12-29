@@ -176,7 +176,7 @@ console.log(arraysEqual([1, 2], [1, 2])); // true
 // Разворачивание (выравнивание) вложенных массивов на глубину depth
 // by def depth === 1, т е из 3х-уровневого массива сделает 2х-уровневый
 // возврацает новый массив
-//? arr.flatMap((elem, index, array) => {}, thisArg)
+//? .flatMap((elem, index, array) => {}, thisArg)
 // объединение flat с глубиной 1  и map
 
 //? P.s.
