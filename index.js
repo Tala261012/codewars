@@ -6,15 +6,96 @@ function devideStrings(delimoe, delitel) {
   if (!compareArrs(delimoeArr, delitelArr)) return 0; // если делимое меньше делителя, то 0.
 
   const result = [];
-  let mainArr = getFirstArr(delimoeArr, delitelArr); // {resultArr, restArr}
+  let ostatok = 0;
+  let mainObj = getFirstObj(delimoeArr, delitelArr); // {resultArr, restArr} первый подмассив и оставшееся
 
-  return mainArr;
+  do {
+    let multiplyedObj = findNumber(mainObj.resultArr, delitelArr);
+    //{resultArr - результат умножения, num - множитель}
+
+    result.push(multiplyedObj.num);
+
+    let subtractedArr = subtractArrs(
+      mainObj.resultArr,
+      multiplyedObj.resultArr
+    );
+
+    console.log("subtractedArr", subtractedArr);
+
+    if (mainObj.restArr.length) {
+      let tempObj = getTempObj(subtractedArr, mainObj.restArr);
+      mainObj = tempObj;
+    } else {
+      if (subtractedArr.length) ostatok = subtractedArr.join("");
+      else ostatok = "0";
+
+      break;
+    }
+  } while (true);
+
+  return `result: ${result.join("")}, ostatok: ${ostatok}`;
 }
 //===================================================================================================
+
+// получить след объект с массивом для деления =============
+// возвращает {resultArr, restArr}
+function getTempObj([...subtractedArr], [...restArr]) {
+  subtractedArr.push(restArr[0]);
+  restArr.shift();
+
+  return { resultArr: subtractedArr, restArr };
+}
+//==========================================================
+
+// Вычитание массивов ======================================
+// возвращает массив
+function subtractArrs([...upperArr], [...lowerArr]) {
+  // для ускорения, чтоб не делать unshift
+  upperArr.reverse();
+  lowerArr.reverse();
+
+  // разница длинн
+  let lengthDifference = upperArr.length - lowerArr.length;
+
+  //заполнение нулями
+  if (lengthDifference > 0) {
+    for (let i = 0; i < lengthDifference; i++) {
+      lowerArr.push(0);
+    }
+  }
+
+  const result = [];
+  let memory = 0;
+
+  for (let i = 0; i < upperArr.length; i++) {
+    upperArr[i] -= memory;
+
+    let num = upperArr[i] - lowerArr[i];
+
+    if (num >= 0) {
+      result.push(num);
+      memory = 0;
+    } else {
+      result.push(10 + num);
+      memory = 1;
+    }
+  }
+
+  result.reverse();
+  deleteZeros(result); //если получились нули в начале
+
+  return result;
+}
+
+//==========================================================
 
 // Подбор числа ============================================
 // возвращает {resultArr - результат умножения, num - множитель}
 function findNumber(mainArr, delitelArr) {
+  if (!compareArrs(mainArr, delitelArr)) {
+    return { resultArr: [0], num: 0 };
+  }
+
   let prevResult = [];
   let tempResult = [...delitelArr];
 
@@ -53,7 +134,7 @@ function multiplyArrs(delitelArr, i) {
 //==========================================================
 
 //Получить ПЕРВУЮ основную строку ==========================
-function getFirstArr(delimoeArr, delitelArr) {
+function getFirstObj(delimoeArr, delitelArr) {
   const resultArr = delimoeArr.slice(0, delitelArr.length);
   const restArr = delimoeArr.slice(delitelArr.length);
 
@@ -88,5 +169,5 @@ function deleteZeros(arr) {
 }
 //==========================================================
 
-console.log(devideStrings("323555", "23"));
-console.log(findNumber([1, 0, 0], [1, 1]));
+console.log(devideStrings("987000", "500000"));
+// console.log(findNumber([1, 0, 0], [1, 1]));
