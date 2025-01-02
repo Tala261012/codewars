@@ -1,5 +1,3 @@
-
-
 //Долго, зато моё =================================================================
 // function testIt(sum, n, ts) {
 //   const resArr = [];
@@ -318,4 +316,98 @@
 // }
 //====================================================================================
 
+//Список дубликатов ==================================================================
+// function findSecretMessage(paragraph) {
+//   let str = "";
+
+//   // Вместо этого должно быть элегантное регулярное выражение
+//	 //const str2 = paragraph.toLowerCase().match(/[a-z]+/g); - возвращает массив
+// 	for (let ch of paragraph.toLowerCase()) {
+//     if (
+//       ch === "." ||
+//       ch === "," ||
+//       ch === "!" ||
+//       ch === "?" ||
+//       ch === ";" ||
+//       ch === ":" ||
+//       ch === "$" ||
+//       ch === "#" ||
+//       ch === "@" ||
+//       ch === "%" ||
+//       ch === "^" ||
+//       ch === "&" ||
+//       ch === "*" ||
+//       ch === "(" ||
+//       ch === ")" ||
+//       ch === "/" ||
+//       ch === "+" ||
+//       ch === "-" ||
+//       ch === "="
+//     ) {
+//       continue;
+//     }
+//     str += ch;
+//   }
+
+//   const arr = str.split(" ");
+
+//   let result = [];
+//   let set = new Set();
+//   let dupes = new Set();
+
+//   for (let item of arr) {
+//     if (set.has(item)) {
+//       dupes.add(item);
+//     } else {
+//       set.add(item);
+//     }
+//   }
+
+//   if (dupes.size === 0) return "";
+
+//   return Array.from(dupes.values()).join(" ");
+// }
+
+// let paragraph = "zxcv asdf is qwer asdf qwer qwer qwer is";
+// console.log(findSecretMessage(paragraph)); // asdf qwer is
+//====================================================================================
+
+//Scramblies Анаграмма ===============================================================
+/*
+Завершите функцию scramble(str1, str2), которая возвращает true, 
+если часть символов str1 можно переставить так, 
+чтобы они соответствовали str2, в противном случае возвращает false.
+*/
+// function scramble(str1, str2) {
+//   let box = createMap(str1);
+//   let goal = createMap(str2);
+
+//   for (let [key, value] of goal) {
+//     let boxValue = box.get(key);
+//     if (!boxValue) return false;
+//     if (boxValue - value < 0) return false;
+//   }
+
+//   return true;
+// }
+
+// function createMap(str) {
+//   let map = new Map();
+
+//   for (let char of str) {
+//     let value = map.get(char);
+//     if (value) {
+//       map.set(char, value + 1);
+//     } else {
+//       map.set(char, 1);
+//     }
+//   }
+
+//   return map;
+// }
+
+// let str1 = "ffkatas";
+// let str2 = "staa";
+
+// console.log(scramble(str1, str2));
 //====================================================================================
