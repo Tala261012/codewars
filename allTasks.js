@@ -412,39 +412,57 @@
 // console.log(scramble(str1, str2));
 //====================================================================================
 
-// работает неправильно
-function skobki(str) {
-  const arr = str.split("").map((el) => (el === "(" ? -1 : 1));
+//Balance the parentheses === 7kyu ===================================================
+// const fixParentheses = (str) => {
+//   const arr = str.split("");
 
-  if (arr[0] === 1) arr.unshift(-1);
-  if (arr[arr.length - 1] === -1) arr.push(1);
+//   if (arr[0] === ")") arr.unshift("(");
+//   if (arr[arr.length - 1] === "(") arr.push(")");
 
-  let beginStr = "";
-  let endStr = "";
+//   const resArr = clearArr(arr);
 
-  arr.reduce((acc, el) => {
-    acc += el;
-    if (el === -1) acc = -1;
-    if (acc > 0) beginStr += "(";
+//   let left = 0;
+//   let right = 0;
 
-    return acc;
-  }, 0);
+//   resArr.forEach((el) => {
+//     if (el === ")") left++;
+//     else right++;
+//   });
 
-  arr.reduce((acc, el) => {
-    acc += el;
-    if (el === 1) acc = 1;
-    if (acc < 0) endStr += ")";
+//   for (let i = 0; i < right; i++) {
+//     arr.push(")");
+//   }
 
-    return acc;
-  }, 1);
+//   for (let i = 0; i < left; i++) {
+//     arr.unshift("(");
+//   }
 
-  return beginStr + arr.map((el) => (el === -1 ? "(" : ")")).join("") + endStr;
-}
+//   return arr.join("");
+// };
 
-let skob = ")))(()())))))))))))))))";
-let meRes = "(((((((((((((()))(()())))))))))))))))";
-let res = skobki(skob);
-console.log(res);
-console.log(meRes === res);
-// (((((((((((((()))(()())))))))))))))))
-//
+// function clearArr([...arr]) {
+//   for (let i = 0; i < arr.length; i++) {
+//     if (arr[i] === "(" && arr[i + 1] === ")") {
+//       arr[i] = 0;
+//       arr[i + 1] = 0;
+//     }
+//   }
+
+//   const resArr = arr.filter((el) => el !== 0);
+
+//   if (resArr.length !== arr.length) return clearArr(resArr);
+//   else return resArr;
+// }
+
+// гениально просто!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// function fixParentheses2(str) {
+//   let left = 0,
+//     right = 0;
+//   [...str].map((el) => (el === "(" ? right++ : right === 0 ? left++ : right--));
+
+//   return "(".repeat(left) + str + ")".repeat(right);
+// }
+
+// console.log(fixParentheses(")()("));
+
+//====================================================================================
