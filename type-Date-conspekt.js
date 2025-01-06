@@ -1,7 +1,7 @@
 //* Date
 /*
 ? new Date()
-без аргументов - ткущая дата, время
+без аргументов - ткущая дата, время, UTC
 ? new Date(milliseconds)
 Создать объект Date с временем, равным количеству миллисекунд 
 (тысячная доля секунды), прошедших с 1 января 1970 года UTC+0.
@@ -34,10 +34,15 @@
 UTC-варианты, возвращающие день, месяц, год для временной зоны UTC+0:
 ? .getUTCFullYear(), .getUTCMonth(), .getUTCDay(), .getUTCDate(), .getUTCHours(), getUTCMinutes(), .getUTCSeconds(), .getUTCMilliseconds()
 
-? getTime()
-Для заданной даты возвращает таймстамп – 
+? .getTime()
+Для заданной даты возвращает ТАЙМСТАМП – 
 количество миллисекунд, прошедших с 1 января 1970 года UTC+0.
-? getTimezoneOffset()
+
+let day2 = new Date(); // 2025-01-06T18:38:26.429Z
+console.log(+day2); // 1736188812053
++day2 работает так же как и getTime() !!!
+
+? .getTimezoneOffset()
 Возвращает разницу В МИНУТАХ между UTC и местным часовым поясом:
 */
 let now = new Date();
@@ -55,7 +60,8 @@ console.log(now.getTime()); // 1736097730345
 ? .setMinutes(min, [sec], [ms])
 ? .setSeconds(sec, [ms])
 ? .setMilliseconds(ms)
-? .setTime(milliseconds) 
+
+? .setTime(timestamp) 
 - (устанавливает дату в виде целого количества миллисекунд, прошедших с 01.01.1970 UTC)
 У всех этих методов, кроме setTime(), есть UTC-вариант, например: setUTCHours().
 */
@@ -65,6 +71,28 @@ let first_march = new Date(2024, 2, 1); // 1 марта 2024
 first_march.setDate(first_march.getDate() + 50); // +50 дней
 console.log(first_march); // 19 апреля 2024
 
-let noww = new Date();
-noww.setDate(noww.getDate() - 10);
-console.log(noww);
+// разница между датами
+let day1 = new Date("2025-01-06");
+let day2 = new Date("2025-01-24");
+console.log((day2 - day1) / (24 * 60 * 60 * 1000));
+console.log((day2.getTime() - day1.getTime()) / (24 * 60 * 60 * 1000)); // быстрее !!!
+// через getTime вычисления быстрее, т к нет преобразования объекта в число
+
+/*
+? Date.now()
+возвращающий текущий ТАЙМСТАМП, но объект Date не создается.
+
+? Date.parse(str)
+- считывает дату из строки.
+- возвращает ТАЙМСТАМП или NaN (если формат строки неправильный)
+это не объект Date, а ЧИСЛО
+
+Формат строки должен быть следующим: YYYY-MM-DDTHH:mm:ss.sssZ, где:
+- YYYY-MM-DD – это дата: год-месяц-день.
+- Символ "T" используется в качестве разделителя.
+- HH:mm:ss.sss – время: часы, минуты, секунды и миллисекунды.
+- Необязательная часть 'Z' обозначает часовой пояс в формате +-hh:mm. 
+Если указать просто букву Z, то получим UTC+0.
+*/
+let stamp = Date.parse("2012-01-26T13:51:50.417-07:00");
+console.log(typeof stamp); // number
