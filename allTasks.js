@@ -466,3 +466,54 @@
 // console.log(fixParentheses(")()("));
 
 //====================================================================================
+
+// Reverse Inside Parentheses (Inside Parentheses)
+function reverse(str) {
+  let start = str.indexOf("(");
+  let end = str.lastIndexOf(")");
+  if (start === -1 || end === -1) {
+    return str;
+  }
+
+  let tempStr = str
+    .slice(start + 1, end)
+    .split("")
+    .reverse()
+    // .map((el) => {
+    //   if (el === "(") el = ")";
+    //   if (el === ")") el = "(";
+    //   return el;
+    // })
+    .join("");
+  console.log(tempStr);
+
+  return (
+    str.slice(0, start) + "(" + reverse(tempStr) + ")" + str.slice(end + 1)
+  );
+}
+
+function reverseInParens(str) {
+  let temp = "[";
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === "(") {
+      temp += "[";
+    } else if (str[i] === ")") {
+      temp += "]";
+    } else if (str[i] === " ") {
+      temp += ",";
+    } else {
+      temp += str[i];
+    }
+  }
+  temp += "]";
+  console.log(temp);
+
+  let arr = JSON.parse(temp);
+  console.log(arr);
+}
+
+let test = "one (two (three) four)"; //[one,[two,[three],four]]
+let test1 = "h(le)lo";
+// reverseInParens(test);
+// console.log(reverse(test));
+
