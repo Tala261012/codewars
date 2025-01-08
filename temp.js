@@ -1,3 +1,4 @@
+// Reverse Inside Parentheses (Inside Parentheses)
 function getStringLikeArray(str) {
   let temp = "[";
   for (let i = 0; i < str.length; i++) {
