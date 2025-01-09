@@ -22,13 +22,33 @@ function addQuotes(str) {
   return str.replace(/([a-zA-Z0-9]+)/g, '"$1"');
 }
 
+function myReverse(item) {
+  if (!Array.isArray(item)) {
+    let word = item.split("").reverse().join("");
+    console.log(word);
+
+    return word;
+  } else {
+    let res = item.reverse().map((el) => myReverse(el));
+    // console.log(result);
+
+    return res;
+  }
+}
+
 function reverseInParens(str) {
   let temp = getStringLikeArray(str);
   let arr = JSON.parse(temp);
+  let result = [];
 
-  return arr;
+  for (let el of arr) {
+    if (Array.isArray(el)) result.push(myReverse(el));
+    else result.push(el);
+  }
+
+  return result;
 }
 
-let test = "one (two (three (five)) four six)"; //[one,[two,[three],four]]
+let test = "one (two three (four (five)))";
 // console.log(getStringLikeArray(test));
-console.log(reverseInParens(test));
+console.log(reverseInParens(test)); //[ 'one', [ 'two', [ 'three', [Array] ], 'four', 'six' ] ]
