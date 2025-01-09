@@ -341,3 +341,49 @@ function printReverseList(list) {
 }
 // printReverseList(list);
 // =======================================================================
+
+// Области видимости =====================================================
+/*
+Сделайте набор «готовых к употреблению» фильтров:
+
+    inBetween(a, b) – между a и b (включительно).
+    inArray([...]) – находится в данном массиве.
+
+Они должны использоваться таким образом:
+
+    arr.filter(inBetween(3,6)) – выбирает только значения между 3 и 6 (включительно).
+    arr.filter(inArray([1,2,3])) – выбирает только элементы, совпадающие с одним из элементов массива
+
+*/
+let arr = [1, 2, 3, 4, 5, 6, 7];
+
+function inBetween(a, b) {
+  return function (x) {
+    //!
+    return x >= a && x <= b;
+  };
+}
+
+function inArray(arr) {
+  return function (x) {
+    return x in arr;
+  };
+}
+console.log(arr.filter(inBetween(3, 6))); // !
+console.log(arr.filter(inArray([1, 2, 3])));
+
+// укороченная сортировка ============================
+let users10 = [
+  { name: "Иван", age: 20, surname: "Иванов" },
+  { name: "Пётр", age: 18, surname: "Петров" },
+  { name: "Анна", age: 19, surname: "Каренина" },
+];
+
+function byField(fieldName) {
+  return function (a, b) {
+    return a[fieldName] > b[fieldName] ? 1 : -1;
+  };
+}
+console.log(users10.sort(byField("name")));
+console.log(users10.sort(byField("age")));
+// =======================================================================
