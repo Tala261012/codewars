@@ -387,3 +387,39 @@ function byField(fieldName) {
 console.log(users10.sort(byField("name")));
 console.log(users10.sort(byField("age")));
 // =======================================================================
+
+// Объкет функции, Named Function Expression =============================
+function makeCounter() {
+  let count = 0;
+
+  function counter() {
+    return count++;
+  }
+
+  counter.set = (value) => (count = value);
+
+  counter.decrease = () => count--;
+
+  return counter;
+}
+
+let counter = makeCounter();
+
+console.log(counter()); // 0
+console.log(counter()); // 1
+
+counter.set(55);
+
+console.log(counter()); // 55
+console.log(counter()); // 56
+
+counter.decrease();
+counter.decrease();
+
+console.log(counter()); // 55
+// =============================================
+
+// Сумма с произвольным количеством скобок sum(0)(1)(2)(3)(4)(5) == 15
+// решение здесь
+// https://learn.javascript.ru/function-object#tasks
+// =======================================================================
