@@ -1,9 +1,21 @@
-function sum(a) {
-  return function ss(b) {
-    // if ()
-    console.log(b);
-    return a + b; // берёт "a" из внешнего лексического окружения
-  };
-}
+//* new Function
+/*
+Синтаксис
+? let func = new Function(arg1?, arg2?, ...argN?, functionBody);
+Функция создаётся с заданными аргументами arg1...argN и телом functionBody.
 
-console.log(sum(1)); // 3
+new Function позволяет превратить любую строку в функцию. 
+Например, можно получить новую функцию с сервера и затем выполнить её:
+
+let str = ... код, полученный с сервера динамически ...
+
+let func = new Function(str);
+func();
+
+? такая функция имеет доступ только к глобальным переменным (из-за минифакторов).
+
+Эти 3 объявления ниже эквивалентны:
+new Function('a', 'b', 'return a + b'); // стандартный синтаксис
+new Function('a,b', 'return a + b'); // через запятую в одной строке
+new Function('a , b', 'return a + b'); // через запятую с пробелами в одной строке
+*/
