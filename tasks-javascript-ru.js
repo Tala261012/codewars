@@ -423,3 +423,39 @@ console.log(counter()); // 55
 // решение здесь
 // https://learn.javascript.ru/function-object#tasks
 // =======================================================================
+
+// setTimeout, setInterval ===============================================
+/*
+Напишите функцию printNumbers(from, to), которая выводит число каждую секунду, 
+начиная от from и заканчивая to.
+Сделайте два варианта решения.
+*/
+// Используя setInterval.
+function printNumbersInterval(from, to) {
+  let current = from;
+
+  let timerId = setInterval(() => {
+    console.log(current);
+    current++;
+
+    if (current > to) clearInterval(timerId);
+  }, 1000);
+}
+
+// printNumbersInterval(-2, 2);
+
+//Используя рекурсивный setTimeout.
+function printNumbersTimeout(from, to) {
+  let current = from;
+
+  setTimeout(function next() {
+    console.log(current);
+    current++;
+
+    if (current <= to) setTimeout(next, 1000);
+  }, 1000);
+}
+
+printNumbersTimeout(0, 5);
+
+// =======================================================================
