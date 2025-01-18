@@ -48,6 +48,14 @@ setTimeout(() => {
   console.log("stop");
 }, 5000);
 
+/*
+? setImmediate(callback, delay?, arg1?, ..., argN?)
+планирует выполнение функции сразу после завершения текущей фазы событий
+Event Loop, но перед следующей фазой. Возвращает timerId.
+У setTimeout приоритет выше
+? clearImmediate(id)
+*/
+
 //? Вложенный setTimeout =========================
 // https://learn.javascript.ru/settimeout-setinterval#vlozhennyy-settimeout
 
