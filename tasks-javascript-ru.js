@@ -459,3 +459,40 @@ function printNumbersTimeout(from, to) {
 printNumbersTimeout(0, 5);
 
 // =======================================================================
+
+// Функции - декораторы
+//?  .call, .apply =========================================================
+/*
+Создайте декоратор spy(func), который должен возвращать обёртку, 
+которая сохраняет все вызовы функции в своём свойстве calls.
+Каждый вызов должен сохраняться как массив аргументов.
+*/
+
+function work(a, b) {
+  let result = a + b;
+  console.log(result); // произвольная функция или метод
+  return result;
+}
+
+function spy(func) {
+  function wrapper(...args) {
+    wrapper.calls.push(args);
+    return func.apply(this, args);
+  }
+  wrapper.calls = [];
+
+  return wrapper;
+}
+
+work = spy(work);
+
+work(1, 2);
+work(2, 2);
+work(4, 2);
+
+console.log(work.calls);
+
+for (let args of work.calls) {
+  console.log("call:" + args.join()); // "call:1,2", "call:2,2"
+}
+// =======================================================================

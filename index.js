@@ -1,31 +1,41 @@
-function slow(x) {
-  // здесь могут быть ресурсоёмкие вычисления
-  let result = x * 10;
-  console.log(`Called with ${x}`);
-  return result;
-}
+/*
+* Заимствование метода
+? [].join.call(arguments)
+если arguments - псевдомассив (у которого нет метода join), 
+можно позаимствовать этот метод у массива
+Мы берём (заимствуем) метод join из обычного массива [].join. 
+И используем [].join.call, чтобы выполнить его в контексте arguments.
+this = arguments
+*/
+let worker = {
+  slow(...nums) {
+    console.log(`Called with ${nums}`);
+    return nums.reduce((sum, el) => (sum += el), 0);
+  },
+};
 
-function cachingDecorator(func) {
+function cachingDecorator(func, hash) {
   let cache = new Map();
-
-  return function (x) {
-    if (cache.has(x)) {
-      // если кеш содержит такой x,
-      return cache.get(x); // читаем из него результат
+  return function () {
+    let key = hash(arguments);
+    if (cache.has(key)) {
+      return cache.get(key);
     }
 
-    let result = func(x); // иначе, вызываем функцию
+    let result = func.call(this, ...arguments);
 
-    cache.set(x, result); // и кешируем (запоминаем) результат
+    cache.set(key, result);
     return result;
   };
 }
 
-slow = cachingDecorator(slow);
+function hash(args) {
+  return [].join.call(args); // (*)
+}
 
-console.log(slow(1)); // slow(1) кешируем
-console.log("Again: " + slow(1)); // возвращаем из кеша
-console.log(slow(2)); // slow(2) кешируем
-console.log("Again: " + slow(2)); // возвращаем из кеша
+worker.slow = cachingDecorator(worker.slow, hash);
 
-console.log(slow);
+console.log(worker.slow(3, 5)); // работает
+console.log("Again " + worker.slow(3, 5));
+
+console.log(worker.slow(2, 5, 3));
