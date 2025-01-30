@@ -1,41 +1,26 @@
 /*
-* Заимствование метода
-? [].join.call(arguments)
-если arguments - псевдомассив (у которого нет метода join), 
-можно позаимствовать этот метод у массива
-Мы берём (заимствуем) метод join из обычного массива [].join. 
-И используем [].join.call, чтобы выполнить его в контексте arguments.
-this = arguments
+Результат декоратора debounce(f, ms) – это обёртка, которая откладывает вызовы f, 
+пока не пройдёт ms миллисекунд бездействия (без вызовов, «cooldown period»), 
+а затем вызывает f один раз с ПОСЛЕДНИМИ аргументами.
 */
-let worker = {
-  slow(...nums) {
-    console.log(`Called with ${nums}`);
-    return nums.reduce((sum, el) => (sum += el), 0);
-  },
-};
-
-function cachingDecorator(func, hash) {
-  let cache = new Map();
+function debounce(func, ms) {
+  let timeout;
   return function () {
-    let key = hash(arguments);
-    if (cache.has(key)) {
-      return cache.get(key);
-    }
-
-    let result = func.call(this, ...arguments);
-
-    cache.set(key, result);
-    return result;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, arguments), ms);
   };
 }
 
-function hash(args) {
-  return [].join.call(args); // (*)
+// почти то же самое
+function debounce2(func, ms) {
+  let timeout;
+  return function (x) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.call(this, x), ms);
+  };
 }
 
-worker.slow = cachingDecorator(worker.slow, hash);
-
-console.log(worker.slow(3, 5)); // работает
-console.log("Again " + worker.slow(3, 5));
-
-console.log(worker.slow(2, 5, 3));
+let f = debounce(console.log, 1000);
+f("a");
+setTimeout(() => f("b"), 200);
+setTimeout(() => f("c"), 500);
