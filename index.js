@@ -1,26 +1,41 @@
-/*
-Результат декоратора debounce(f, ms) – это обёртка, которая откладывает вызовы f, 
-пока не пройдёт ms миллисекунд бездействия (без вызовов, «cooldown period»), 
-а затем вызывает f один раз с ПОСЛЕДНИМИ аргументами.
+/* Тормозящий (throttling) декоратор
+Создайте «тормозящий» декоратор throttle(f, ms), который возвращает обёртку.
+При многократном вызове он передает вызов f не чаще одного раза в ms миллисекунд.
 */
-function debounce(func, ms) {
-  let timeout;
-  return function () {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.apply(this, arguments), ms);
-  };
+function throttle(func, ms) {
+  let isThrottled = false,
+    savedArgs,
+    savedThis;
+
+  function wrapper() {
+    if (isThrottled) {
+      // (2)
+      savedArgs = arguments;
+      savedThis = this;
+      return;
+    }
+
+    func.apply(this, arguments); // (1)
+
+    isThrottled = true;
+
+    setTimeout(function () {
+      isThrottled = false; // (3)
+      if (savedArgs) {
+        wrapper.apply(savedThis, savedArgs);
+        savedArgs = savedThis = null;
+      }
+    }, ms);
+  }
+
+  return wrapper;
 }
 
-// почти то же самое
-function debounce2(func, ms) {
-  let timeout;
-  return function (x) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func.call(this, x), ms);
-  };
+function f(a) {
+  console.log(a);
 }
 
-let f = debounce(console.log, 1000);
-f("a");
-setTimeout(() => f("b"), 200);
-setTimeout(() => f("c"), 500);
+let f1000 = throttle(f, 1000);
+f1000(1);
+f1000(2);
+f1000(3);
