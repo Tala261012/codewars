@@ -78,3 +78,63 @@ delete user?.name; // удаляет user.name если пользователь
 Мы можем использовать ?. для безопасного ЧТЕНИЯ и УДАЛЕНИЯ, но не для записи !!!
 =================================================================================
 */
+
+/*
+* Флаги (атрибуты) и дескрипторы свойств
+? writable 
+– если true, свойство можно изменить, иначе оно только для чтения.
+? enumerable 
+– если true, свойство перечисляется в циклах, в противном случае циклы его игнорируют.
+? configurable 
+– если true, свойство можно удалить, а эти атрибуты можно изменять, 
+иначе этого делать нельзя.
+
+? Object.getOwnPropertyDescriptor
+let descriptor = Object.getOwnPropertyDescriptor(obj, propertyName);
+- возвращает объект - «дескриптор свойства», содержит значение свойства и все его флаги.
+
+Для свойств объектов, созданных "обычным" способом это так:
+{
+  "value": "John",
+  "writable": true,
+  "enumerable": true,
+  "configurable": true
+}
+? Object.getOwnPropertyDescriptors(obj)
+- получить все дескрипторы свойств сразу
+- этот метод можно использовать для клонирования объекта вместе с его флагами:
+let clone = Object.defineProperties({}, Object.getOwnPropertyDescriptors(obj));
+
+? Object.defineProperty(obj, propertyName, descriptor)
+Если свойство существует, defineProperty обновит его флаги. 
+В противном случае метод создаёт новое свойство с указанным значением и флагами; 
+если какой-либо флаг не указан явно, ему присваивается значение false.
+
+Для НОВОГО свойства необходимо ЯВНО указывать все флаги, для которых значение true
+
+Пример 1 --------------------------------
+let user = {};
+Object.defineProperty(user, "name", {
+  value: "John"
+});
+
+Пример 2 --------------------------------
+let user = {
+  name: "John"
+};
+Object.defineProperty(user, "name", {
+  writable: false
+});
+user.name = "Pete"; // Ошибка: Невозможно изменить доступное только для чтения свойство 'name'
+------------------------------------------
+
+Неперечислимые свойства также не возвращаются Object.key !!!
+Определение свойства как неконфигурируемого – это дорога в один конец. 
+Мы не сможем изменить его обратно с помощью defineProperty. !!!
+?  Object.defineProperties(obj, descriptors)
+- позволяет определять множество свойств сразу.
+Object.defineProperties(user, {
+  name: { value: "John", writable: false },
+  surname: { value: "Smith", writable: false },
+});
+*/

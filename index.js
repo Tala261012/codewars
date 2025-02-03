@@ -1,8 +1,10 @@
-let user = {
-  name: "Kate",
-  age: 90,
-};
-delete user?.street;
-console.log(user);
+let user = {};
 
-console.log(user?.admin);
+Object.defineProperties(user, {
+  name: { value: "John", writable: false },
+  surname: { value: "Smith", writable: false },
+  // ...
+});
+
+let desc = Object.getOwnPropertyDescriptors(user);
+console.log(desc);
