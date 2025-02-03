@@ -81,6 +81,7 @@ delete user?.name; // удаляет user.name если пользователь
 
 /*
 * Флаги (атрибуты) и дескрипторы свойств
+Дескрипторы свойств работают на уровне конкретных свойств.
 ? writable 
 – если true, свойство можно изменить, иначе оно только для чтения.
 ? enumerable 
@@ -137,4 +138,35 @@ Object.defineProperties(user, {
   name: { value: "John", writable: false },
   surname: { value: "Smith", writable: false },
 });
+
+? .propertyIsEnumerable(prop)
+проверяет, будет ли свойство появляться при итерации for..in
+prop - строка или символ
+true/false
 */
+
+/*
+ * Глобальное запечатывание объекта
+Эти методы, которые ограничивают доступ ко всему объекту, 
+а не на уровне конкретных свойств как дескрипторы
+? Object.preventExtensions(obj)
+Запрещает добавлять новые свойства в объект
+? Object.isExtensible(obj)
+Можно ли доваблять новые свойства? true/false
+
+? Object.seal(obj)
+Запрещает добавлять/удалять свойства. (Запечатывание)
+Устанавливает configurable: false для всех существующих свойств.
+? Object.isSealed(obj)
+Возвращает true, если добавление/удаление свойств запрещено 
+и для всех существующих свойств установлено configurable: false.
+если было выполнено Object.preventExtensions(obj) - тоже false (не нормальный)
+
+? Object.freeze(obj)
+Запрещает добавлять/удалять/изменять свойства. 
+Устанавливает configurable: false, writable: false для всех существующих свойств.
+? Object.isFrozen(obj)
+Является ли объкет замороженным? true/false
+Возвращает true, если добавление/удаление/изменение свойств запрещено, 
+и для всех текущих свойств установлено configurable: false, writable: false.
+ */
