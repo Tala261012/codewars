@@ -1,10 +1,17 @@
-let user = {};
+let user = {
+  name: "John",
+  surname: "Smith",
 
-Object.defineProperties(user, {
-  name: { value: "John", writable: false },
-  surname: { value: "Smith", writable: false },
-  // ...
-});
+  get fullName() {
+    return `${this.name} ${this.surname}`;
+  },
 
-let desc = Object.getOwnPropertyDescriptors(user);
-console.log(desc);
+  set fullName(value) {
+    [this.name, this.surname] = value.split(" ");
+  },
+};
+
+console.log(user.fullName); // John Smith
+user.fullName = "Ivan Petrov";
+console.log(user.name); // Ivan
+console.log(user.surname); // Petrov
