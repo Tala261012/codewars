@@ -226,7 +226,8 @@ Object.defineProperty(user, 'fullName', {
 */
 
 /*
- *  .__proto__  =================================================================
+* Прототипное наследование ======================================================
+* .__proto__  
 [[Prototype]] - специальное скрытое свойство, которое равно
 - либо null
 - либо ссылается на другой объект
@@ -253,4 +254,29 @@ for..in проходит не только по собственным, но и 
 
 ?obj.hasOwnProperty(key)
 возвращает true, если у obj есть СОБСТВЕННОЕ, а не унаследованное, свойство с именем key.
+
+* .prototype    .constructor
+По умолчанию "prototype" – объект с единственным свойством constructor, 
+которое ссылается на функцию-конструктор.
+function Rabbit() {}
+
+по умолчанию:
+Rabbit.prototype = { constructor: Rabbit }
+
+console.log( Rabbit.prototype.constructor == Rabbit ); // true
 */
+function Rabbit(name) {
+  this.name = name;
+  console.log(name);
+}
+// по умолчанию:
+// Rabbit.prototype = { constructor: Rabbit }
+
+let rabbit = new Rabbit("White"); // White
+console.log(rabbit.constructor == Rabbit); // true (свойство получено из прототипа)
+
+let rabbit2 = new rabbit.constructor("Black"); // Blsck
+// Это ВЫЗОВ того конструктора, с помощью которого был создан rabbit, трюк
+// По умолчанию все функции имеют F.prototype = { constructor: F },
+// поэтому мы можем получить конструктор объекта через свойство "constructor".
+// https://learn.javascript.ru/function-prototype#sozdayte-novyy-obekt-s-pomoschyu-uzhe-suschestvuyuschego
