@@ -81,6 +81,7 @@ delete user?.name; // удаляет user.name если пользователь
 
 /*
 * Флаги (атрибуты) и дескрипторы свойств ========================================
+
 Дескрипторы свойств работают на уровне конкретных свойств.
 ? writable 
 – если true, свойство можно изменить, иначе оно только для чтения.
@@ -227,7 +228,8 @@ Object.defineProperty(user, 'fullName', {
 
 /*
 * Прототипное наследование ======================================================
-* .__proto__  
+
+? .__proto__  ===================================================================
 [[Prototype]] - специальное скрытое свойство, которое равно
 - либо null
 - либо ссылается на другой объект
@@ -254,8 +256,9 @@ for..in проходит не только по собственным, но и 
 
 ?obj.hasOwnProperty(key)
 возвращает true, если у obj есть СОБСТВЕННОЕ, а не унаследованное, свойство с именем key.
+=================================================================================
 
-* .prototype    .constructor
+? .prototype    .constructor ====================================================
 По умолчанию "prototype" – объект с единственным свойством constructor, 
 которое ссылается на функцию-конструктор.
 function Rabbit() {}
@@ -275,8 +278,37 @@ function Rabbit(name) {
 let rabbit = new Rabbit("White"); // White
 console.log(rabbit.constructor == Rabbit); // true (свойство получено из прототипа)
 
-let rabbit2 = new rabbit.constructor("Black"); // Blsck
-// Это ВЫЗОВ того конструктора, с помощью которого был создан rabbit, трюк
-// По умолчанию все функции имеют F.prototype = { constructor: F },
-// поэтому мы можем получить конструктор объекта через свойство "constructor".
-// https://learn.javascript.ru/function-prototype#sozdayte-novyy-obekt-s-pomoschyu-uzhe-suschestvuyuschego
+let rabbit2 = new rabbit.constructor("Black"); // TODO трюк
+/*
+Это ВЫЗОВ того конструктора, с помощью которого был создан rabbit, трюк
+По умолчанию все функции имеют F.prototype = { constructor: F },
+поэтому мы можем получить конструктор объекта через свойство "constructor".
+https://learn.javascript.ru/function-prototype#sozdayte-novyy-obekt-s-pomoschyu-uzhe-suschestvuyuschego
+
+F.prototype используется ТОЛЬКО в момент вызова new F !!!
+
+Чтобы сохранить ВЕРНОЕ свойство "constructor", мы должны добавлять/удалять/изменять 
+свойства у прототипа по умолчанию вместо того, чтобы перезаписывать его целиком:
+function Rabbit() {}
+Rabbit.prototype.jumps = true
+=================================================================================
+
+? Заимствование у прототипов
+псевдоиассив:
+let obj = {
+  0: "Hello",
+  1: "world!",
+  length: 2,
+};
+
+obj.join = Array.prototype.join;
+
+console.log(obj.join(",")); // Hello,world!
+
+или унаследовать методы массива, установив объекту свойство __proto__
+{...
+	__proto__: Array.prototype,
+...
+}
+
+*/
