@@ -1,31 +1,28 @@
-class Article {
-  constructor(title, date) {
-    this.title = title;
-    this.date = date;
+class CoffeeMachine {
+  #waterLimit = 200;
+  _power = 0;
+
+  constructor(power = 100) {
+    this._power = power;
   }
 
-  static publisher = "Илья Кантор";
-
-  static compare(articleA, articleB) {
-    return articleA.date - articleB.date;
+  #checkWater(value) {
+    if (value < 0) throw new Error("Отрицательный уровень воды");
+    if (value > this.#waterLimit) throw new Error("Слишком много воды");
   }
 
-  static createTodays() {
-    // помним, что this = Article
-    return new this("Сегодняшний дайджест", new Date());
+  setWaterLimit(value) {
+    if (value > 0) this.#waterLimit = value;
+  }
+
+  getWaterLimit() {
+    return this.#waterLimit;
   }
 }
 
-// использование
-let articles = [
-  new Article("HTML", new Date(2019, 1, 1)),
-  new Article("CSS", new Date(2019, 0, 1)),
-  new Article("JavaScript", new Date(2019, 11, 1)),
-];
+let coffeeMachine = new CoffeeMachine(100);
 
-articles.sort(Article.compare);
-console.log(articles[0].title); // CSS
-console.log(Object.getOwnPropertyDescriptors(articles[0]));
-
-let today = Article.createTodays();
-console.log(today.publisher);
+// снаружи нет доступа к приватным методам класса
+console.log(coffeeMachine._power); // 100
+coffeeMachine.setWaterLimit(1000);
+console.log(coffeeMachine.getWaterLimit());
