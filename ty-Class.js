@@ -127,7 +127,7 @@ rabbit.stop(); // Белый кролик стоит. Белый кролик п
 MyClass.property = ...
 MyClass.method = ...
 
-Статические свойства и методы НАСЛЕДУЮТСЯ.
+? Статические свойства и методы НАСЛЕДУЮТСЯ.
 "статичный", то есть "есть всегда" - независимо создан объект или нет.
 
 ? Приватные и защищённые методы и свойства ======================================
@@ -161,4 +161,82 @@ MyClass.method = ...
 
 В терминах ООП отделение внутреннего интерфейса от внешнего называется 
 ? инкапсуляция
+
+? Расширение встроенных классов =================================================
+От встроенных классов, таких как Array, Map и других, тоже можно наследовать.
+class PowerArray extends Array {}
+При этом встроенные методы, такие как filter, map и другие возвращают 
+новые объекты унаследованного класса PowerArray, а не обычный массив.
+
+?  [Symbol.species]
+При помощи специального статического геттера Symbol.species можно вернуть конструктор, 
+который JavaScript будет использовать в filter, map и других методах 
+для создания новых объектов.
+*/
+class PowerArray extends Array {
+  isEmpty() {
+    return this.length === 0;
+  }
+
+  // встроенные методы массива будут использовать этот метод как конструктор
+  static get [Symbol.species]() {
+    return Array;
+  }
+}
+
+let arr = new PowerArray(1, 2, 5, 10, 50);
+alert(arr.isEmpty()); // false, работает
+
+// filter создаст новый массив, используя arr.constructor[Symbol.species] как конструктор
+let filteredArr = arr.filter((item) => item >= 10);
+
+// filteredArr не является PowerArray, это Array
+alert(filteredArr.isEmpty()); // Error: filteredArr.isEmpty is not a function, не работает
+// ==============================================================================
+/*
+? instanceof
+obj instanceof Class
+принадлежит ли объект obj указанному классу Class, с учётом наследования?
+- возврацает true/false
+obj instanceof Class
+
+? Symbol.hasInstance
+Обычно оператор instanceof просматривает для проверки цепочку прототипов. 
+Но это поведение может быть изменено при помощи статического метода 
+Symbol.hasInstance.*/
+// проверка instanceof будет полагать,
+// что всё со свойством canEat - животное Animal
+class Animal {
+  static [Symbol.hasInstance](obj) {
+    if (obj.canEat) return true;
+  }
+}
+
+let obj = { canEat: true };
+console.log(obj instanceof Animal); // true: вызван Animal[Symbol.hasInstance](obj)
+// ==============================================================================
+/*
+? toString тонкости
+Внутри, алгоритм метода toString анализирует контекст вызова this 
+и возвращает соответствующий результат. 
+
+let s = Object.prototype.toString;
+
+alert( s.call(123) ); // [object Number]
+alert( s.call(null) ); // [object Null]
+alert( s.call(alert) ); // [object Function]
+
+Поведение метода объектов toString можно настраивать, 
+используя специальное свойство объекта 
+? Symbol.toStringTag
+*/
+let user = {
+  [Symbol.toStringTag]: "User",
+};
+
+alert({}.toString.call(user)); // [object User]
+/*
+Можно использовать {}.toString.call вместо instanceof 
+для встроенных объектов, когда мы хотим получить тип в виде строки, 
+а не просто сделать проверку на true/false.
 */
