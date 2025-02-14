@@ -1,24 +1,13 @@
-let sayHiMixin = {
-  sayHi() {
-    console.log(`Привет, ${this.name}`);
-  },
-  sayBye() {
-    console.log(`Пока, ${this.name}`);
-  },
-};
+let json = '{ "age": 30 }'; // данные неполны
 
-// использование:
-class User {
-  constructor(name) {
-    this.name = name;
+try {
+  let user = JSON.parse(json); // <-- выполнится без ошибок
+
+  if (!user.name) {
+    throw new SyntaxError("Данные неполны: нет имени"); // (*)
   }
+
+  console.log(user.name);
+} catch (e) {
+  console.log("JSON Error: " + e.message); // JSON Error: Данные неполны: нет имени
 }
-
-// копируем методы
-Object.assign(User.prototype, sayHiMixin); // !
-
-class Person extends User {}
-
-// теперь User может сказать Привет
-new User("Вася").sayHi(); // Привет, Вася!
-new Person("Vova").sayHi();
