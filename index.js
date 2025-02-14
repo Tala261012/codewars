@@ -1,7 +1,24 @@
-class Animal {}
+let sayHiMixin = {
+  sayHi() {
+    console.log(`Привет, ${this.name}`);
+  },
+  sayBye() {
+    console.log(`Пока, ${this.name}`);
+  },
+};
 
-class Rabbit extends Animal {}
-let rabbit = new Rabbit();
+// использование:
+class User {
+  constructor(name) {
+    this.name = name;
+  }
+}
 
-// это объект класса Rabbit?
-console.log(rabbit instanceof Animal); // true
+// копируем методы
+Object.assign(User.prototype, sayHiMixin); // !
+
+class Person extends User {}
+
+// теперь User может сказать Привет
+new User("Вася").sayHi(); // Привет, Вася!
+new Person("Vova").sayHi();
