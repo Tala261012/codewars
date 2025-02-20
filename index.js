@@ -1,16 +1,9 @@
-class FormatError extends SyntaxError {
-  constructor(message) {
-    super(message);
-    this.name = this.constructor.name;
-    this.stack = "stack";
-  }
+/* Встроенная функция setTimeout использует колбэк-функции. 
+Создайте альтернативу, использующую промисы.
+Функция delay(ms) должна возвращать промис, который перейдёт в состояние 
+«выполнен» через ms миллисекунд, так чтобы мы могли добавить к нему .then:
+*/
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(() => resolve(), ms));
 }
-
-let err = new FormatError("ошибка форматирования");
-
-console.log(err.message); // ошибка форматирования
-console.log(err.name); // FormatError
-console.log(err.stack); // stack
-
-console.log(err instanceof FormatError); // true
-console.log(err instanceof SyntaxError); // true (потому что наследует от SyntaxError)
+delay(3000).then(() => console.log("выполнилось через 3 секунды"));
