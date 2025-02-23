@@ -177,8 +177,8 @@ let promise = new Promise((resolve, reject) => reject(error));
 
 /*
  * async/await ===================================================================
-Это синтаксический сахар для promise.then
 
+Это синтаксический сахар для promise.then
 async function f() {
   return 1;
 }
