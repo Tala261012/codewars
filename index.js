@@ -1,19 +1,27 @@
-function* generateSequence() {
-  yield 1;
-  yield 2;
-  return 3;
-}
+let range = {
+  from: 1,
+  to: 5,
 
-let generator = generateSequence();
+  // for..of range вызывает этот метод один раз в самом начале
+  [Symbol.iterator]() {
+    // ...он возвращает перебираемый объект:
+    // далее for..of работает только с этим объектом, запрашивая следующие значения
+    return {
+      current: this.from,
+      last: this.to,
 
-let one = generator.next();
-console.log(one); // {value: 1, done: false}
+      // next() вызывается при каждой итерации цикла for..of
+      next() {
+        // нужно вернуть значение как объект {done:.., value :...}
+        if (this.current <= this.last) {
+          return { done: false, value: this.current++ };
+        } else {
+          return { done: true };
+        }
+      },
+    };
+  },
+};
 
-let two = generator.next();
-console.log(two); // {value: 1, done: false}
-
-let three = generator.next();
-console.log(three); // {value: 1, done: false}
-
-let four = generator.next();
-console.log(four); // {value: 1, done: false}
+// при переборе объекта range будут выведены числа от range.from до range.to
+console.log([...range]); // 1,2,3,4,5
