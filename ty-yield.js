@@ -164,3 +164,92 @@ generator3.throw(new Error("Ответ не найден в моей базе д
 приводит к исключению на строке (1) с yield. 
 В примере выше try..catch перехватывает её и отображает.
 */
+
+/*
+* Асинхронные итераторы и генераторы ============================================
+Используется Symbol.asyncIterator вместо Symbol.iterator.
+next() должен возвращать промис.
+Чтобы перебрать такой объект, используется цикл for await (let item of iterable).
+? for await (let item of iterable)
+*/
+let range2 = {
+  from: 1,
+  to: 5,
+
+  // for await..of вызывает этот метод один раз в самом начале
+  [Symbol.asyncIterator]() {
+    // (1)
+    // ...возвращает объект-итератор:
+    // далее for await..of работает только с этим объектом,
+    // запрашивая у него следующие значения вызовом next()
+    return {
+      current: this.from,
+      last: this.to,
+
+      // next() вызывается на каждой итерации цикла for await..of
+      async next() {
+        // (2)
+        // должен возвращать значение как объект {done:.., value :...}
+        // (автоматически оборачивается в промис с помощью async)
+
+        // можно использовать await внутри для асинхронности:
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // (3)
+
+        if (this.current <= this.last) {
+          return { done: false, value: this.current++ };
+        } else {
+          return { done: true };
+        }
+      },
+    };
+  },
+};
+
+(async () => {
+  for await (let value of range2) {
+    // (4)
+    alert(value); // 1,2,3,4,5
+  }
+})();
+
+//? Асинхронный генератор =======================================================
+async function* generateSequence3(start, end) {
+  for (let i = start; i <= end; i++) {
+    // ура, можно использовать await!
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    yield i;
+  }
+}
+
+(async () => {
+  let generator = generateSequence3(1, 5);
+  for await (let value of generator) {
+    alert(value); // 1, потом 2, потом 3, потом 4, потом 5
+  }
+})();
+
+//? Асинхронно перебираемый объект ==============================================
+let range3 = {
+  from: 1,
+  to: 5,
+
+  async *[Symbol.asyncIterator]() {
+    // то же, что и [Symbol.asyncIterator]: async function*()
+    for (let value = this.from; value <= this.to; value++) {
+      // пауза между значениями, ожидание
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      yield value;
+    }
+  },
+};
+
+(async () => {
+  for await (let value of range3) {
+    alert(value); // 1, потом 2, потом 3, потом 4, потом 5
+  }
+})();
+
+// пример
+// https://learn.javascript.ru/async-iterators-generators#primer-iz-realnoy-praktiki
