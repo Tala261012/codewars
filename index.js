@@ -1,11 +1,19 @@
-// Есть «обычная» функция.
-// Как можно внутри неё получить результат выполнения async–функции?
-async function wait() {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return 10;
+function* generateSequence() {
+  yield 1;
+  yield 2;
+  return 3;
 }
-// ответ
-function f() {
-  wait().then((result) => console.log(result));
-}
-f();
+
+let generator = generateSequence();
+
+let one = generator.next();
+console.log(one); // {value: 1, done: false}
+
+let two = generator.next();
+console.log(two); // {value: 1, done: false}
+
+let three = generator.next();
+console.log(three); // {value: 1, done: false}
+
+let four = generator.next();
+console.log(four); // {value: 1, done: false}
