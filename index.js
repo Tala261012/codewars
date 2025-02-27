@@ -1,27 +1,17 @@
-let range = {
-  from: 1,
-  to: 5,
+function* gen() {
+  let ask1 = yield "2 + 2 = ?";
 
-  // for..of range вызывает этот метод один раз в самом начале
-  [Symbol.iterator]() {
-    // ...он возвращает перебираемый объект:
-    // далее for..of работает только с этим объектом, запрашивая следующие значения
-    return {
-      current: this.from,
-      last: this.to,
+  console.log(ask1); // 4
 
-      // next() вызывается при каждой итерации цикла for..of
-      next() {
-        // нужно вернуть значение как объект {done:.., value :...}
-        if (this.current <= this.last) {
-          return { done: false, value: this.current++ };
-        } else {
-          return { done: true };
-        }
-      },
-    };
-  },
-};
+  let ask2 = yield "3 * 3 = ?";
 
-// при переборе объекта range будут выведены числа от range.from до range.to
-console.log([...range]); // 1,2,3,4,5
+  console.log(ask2); // 9
+}
+
+let generator = gen();
+
+console.log(generator.next().value); // "2 + 2 = ?"
+
+console.log(generator.next(4).value); // "3 * 3 = ?"
+
+console.log(generator.next(9).done); // true
