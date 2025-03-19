@@ -204,3 +204,22 @@ let say = obj.default;
 
 say();
 */
+
+/*
+? Node.js =======================================================================
+
+? require(path)
+импорт модулей в нод.
+let test = require('./test.js')
+
+? module.exports
+встроенное свойство объекта module, которое используется для экспорта значения из текущего модуля.
+Когда вы присваиваете значение в module.exports,
+вы делаете его доступным для импорта в другие файлы или пакеты с помощью require
+
+...
+module.exports = {add, subtract}
+
+...
+const {add, subtract} = require('./utils.js')
+*/
